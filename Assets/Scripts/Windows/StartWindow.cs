@@ -5,6 +5,15 @@ using UnityEngine;
 public class StartWindow : WindowRoot
 {
     public RecordWindow RecordWindow;
+
+    protected override void InitWindow()
+    {
+        base.InitWindow();
+
+    }
+
+
+
     private void Update()
     {
         EnterRecordWindow();
