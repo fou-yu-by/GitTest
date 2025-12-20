@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
 using UnityEngine.UI;
 
@@ -9,6 +10,23 @@ using UnityEngine.UI;
 public class RecordWindow : WindowRoot
 {
     public GameObject[] dataArr;
+
+    public GameWindow gameWindow;
+
+    [HideInInspector]
+    public int dataChooseNum = 0;
+
+
+
+    private void Update()
+    {
+        ChangeChoose();
+        EnterGame();
+    }
+
+
+
+
 
 
     protected override void InitWindow()
@@ -30,6 +48,40 @@ public class RecordWindow : WindowRoot
             dataArr[i].transform.GetChild(3).GetComponent<Text>().text = Time;
         }
     }
+
+
+
+    /// <summary>
+    /// 修改选中效果
+    /// </summary>
+    private void ChangeChoose()
+    {
+        RectTransform dataChoose = transform.Find("DataChoose").GetComponent<RectTransform>();
+        float posx = dataChoose.localPosition.x;
+        if (Input.GetKeyDown(KeyCode.RightArrow))
+        {
+            posx = posx >= 300f ? -300f : posx + 300f;
+            dataChooseNum = dataChooseNum >= 2 ? 0 : dataChooseNum + 1;
+            dataChoose.localPosition = new Vector2(posx, dataChoose.localPosition.y);
+        }
+        else if (Input.GetKeyDown(KeyCode.LeftArrow))
+        {
+            posx = posx <= -300f ? 300f : posx - 300f;
+            dataChooseNum = dataChooseNum <= 0 ? 2 : dataChooseNum - 1;
+            dataChoose.localPosition = new Vector2(posx, dataChoose.localPosition.y);
+        }
+
+    }
+
+    private void EnterGame()
+    {
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            SetWindowState(false);
+            gameWindow.SetWindowState(true);
+        }
+    }
+
 
 
 }
