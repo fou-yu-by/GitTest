@@ -9,6 +9,10 @@ using UnityEngine.UI;
 
 public class RecordWindow : WindowRoot
 {
+
+    public PlayerController playerController;
+
+
     public GameObject[] dataArr;
 
     public GameWindow gameWindow;
@@ -77,6 +81,7 @@ public class RecordWindow : WindowRoot
     {
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
+            playerController.InitPlayer();
             SetWindowState(false);
             gameWindow.SetWindowState(true);
         }

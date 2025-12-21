@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Xml;
-
+using System.IO;
 
 /// <summary>
 /// 用于加载资源，提供获取资源的方法
@@ -23,9 +23,11 @@ public class ResourceSvc : MonoBehaviour
 
     private void InitSaveData()
     {
-        TextAsset xmlFile = Resources.Load<TextAsset>("Data/saveData");
+        string path = Application.dataPath + "/Resources/Data/saveData.xml";
+
+        StreamReader xmlFile = new StreamReader(path);
         dataDocument = new XmlDocument();
-        dataDocument.LoadXml(xmlFile.text);
+        dataDocument.LoadXml(xmlFile.ReadToEnd());
         dataNodeList = dataDocument.SelectSingleNode("data").ChildNodes;
     }
 

@@ -4,15 +4,8 @@ using UnityEngine;
 
 public class GameWindow : WindowRoot
 {
-    // Start is called before the first frame update
-    void Start()
+    protected override void InitWindow()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        base.InitWindow();
     }
 }
