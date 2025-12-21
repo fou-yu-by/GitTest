@@ -12,6 +12,9 @@ public class PlayerController : MonoBehaviour
     public float jumpSpeed2;
     private CapsuleCollider2D feet;
 
+
+    public GameWindow gameWindow;
+
     public float speed;
 
     public void InitPlayer()
@@ -125,5 +128,17 @@ public class PlayerController : MonoBehaviour
             { jumpCount--; }
         }
     }
+
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.transform.CompareTag("Spike"))
+        {
+            gameWindow.GameOver();
+        }
+    }
+
+
+
 
 }
