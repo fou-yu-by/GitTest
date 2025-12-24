@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Xml;
+
 using UnityEngine;
+using Newtonsoft.Json;
+
 
 public class Model
 {
@@ -15,53 +17,90 @@ public class Model
             if(instance == null)
             {
                 instance = new Model();
+                instance.InitData();
             }
+
             return instance;
         }
     }
 
-    public XmlDocument dataDocument;
-    public XmlNodeList dataNodeList;
+    public float exp {  get; private set; }
 
-    public void InitModel()
+    public float health {  get; private set; }
+
+    private ModelData modelData;
+
+    public void InitData()
     {
-        instance = this;
+        modelData = LocalData();
+        exp = modelData.exp;
+        health = modelData.health;
+    }
 
+
+    public void GetData()
+    {
+        exp = modelData.exp;
+        health = modelData.health;
+    }
+
+
+    public void LevUp()
+    {
+        if(exp - 200 >= 0)
+        {
+            exp -= 200;
+            health += 10;
+        }
+
+        this.TriggerEvent("UpdateView", new LevUpArgs { model = this });
+        SaveData(modelData);
+    }
+
+
+    public static void SaveData(ModelData data)
+    {
+        if(!File.Exists(Application.persistentDataPath + "/users"))
+        {
+            Directory.CreateDirectory(Application.persistentDataPath + "/users");
+        }
+        data.GetValue();
+        string jsonData = JsonConvert.SerializeObject(data);
+        File.WriteAllText(Application.persistentDataPath + string.Format("/users/ModelData.json"), jsonData);
+
+    }
+
+    public static ModelData LocalData()
+    {
+        string path = Application.persistentDataPath + string.Format("/users/ModelData.json");
+        if (File.Exists(path))
+        {
+            string jsonData = File.ReadAllText(path);
+            return JsonConvert.DeserializeObject<ModelData>(jsonData);
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+
+   
+}
+
+
+
+public class ModelData
+{
+    public float exp;
+    public float health;
+
+    public void GetValue()
+    {
+        exp = Model.Instance.exp;
+        health = Model.Instance.health;
     }
 
 
 
-    private string name;
-    private int deathCount;
-    private string time;
-    private string state;
-
-    public string Name { get { return name; } }
-    public int DeathCount { get { return deathCount; } }
-    public string Time { get { return time; } }
-    public string State { get { return state; } }
-
-
-    //初始化本地资源
-    private void InitSaveData()
-    {
-        string path = Application.dataPath + "/Resources/Data/saveData.xml";
-
-        dataDocument = new XmlDocument();
-        StreamReader xmlFile = new StreamReader(path);
-        dataDocument.LoadXml(xmlFile.ReadToEnd());
-        dataNodeList = dataDocument.SelectSingleNode("data").ChildNodes;
-
-    }
-
-    private void GetSaveData(int dataChooseNum)
-    {
-        XmlElement element = (XmlElement)dataNodeList[dataChooseNum];
-        state = element.GetAttribute("state");
-        time = element.GetAttribute("time");
-        deathCount = int.Parse(element.GetAttribute("death"));
-        time = element.GetAttribute("time");
-
-    }
-    
 }
