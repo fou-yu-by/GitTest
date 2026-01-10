@@ -51,6 +51,12 @@ public class StateController : SingleMonoBase<StateController>,IStateMachineOwne
             case PlayerState.WallSlide:
                 stateMachine.EnterState<PlayerWallSlideState>();
                 break;
+            case PlayerState.CatchSword:
+                stateMachine.EnterState<PlayerCatchSwordState>();
+                break;
+            case PlayerState.AimSword:
+                stateMachine.EnterState<PlayerAimSwordState>();
+                break;
         }
     }
 

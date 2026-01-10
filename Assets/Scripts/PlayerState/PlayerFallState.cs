@@ -25,13 +25,22 @@ public class PlayerFallState : PlayerStateBase
 
 
         #region 冲刺检测(按下冲刺且不处于冷却时间)
-        if (player.isInputDash && player.canDash)
+        if (player.isInputDash && SkillManager.Instance.dash.CanUseSkill())
         {
             controller.SwitchState(PlayerState.Dash);
             return;
         }
 
         #endregion
+
+        #region 触发滑墙
+        if (player.wallCheck.CheckOnWall())
+        {
+            controller.SwitchState(PlayerState.WallSlide);
+            return;
+        }
+        #endregion
+
 
 
     }

@@ -26,7 +26,7 @@ public class PlayerJumpState : PlayerStateBase
 
 
         #region 冲刺检测(按下冲刺且不处于冷却时间)
-        if (player.isInputDash && player.canDash)
+        if (player.isInputDash && SkillManager.Instance.dash.CanUseSkill())
         {
             controller.SwitchState(PlayerState.Dash);
             return;

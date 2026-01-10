@@ -33,7 +33,7 @@ public class PlayerIdleState : PlayerStateBase
         #endregion
 
         #region ³å´Ì¼ì²â(°´ÏÂ³å´ÌÇÒ²»´¦ÓÚÀäÈ´Ê±¼ä)
-        if (player.isInputDash && player.canDash)
+        if (player.isInputDash && SkillManager.Instance.dash.CanUseSkill())
         {
             controller.SwitchState(PlayerState.Dash);
             return;
@@ -49,6 +49,18 @@ public class PlayerIdleState : PlayerStateBase
         }
 
         #endregion
+
+        #region ¹¥»÷¼ì²â
+        if (player.isInputAttack)
+        {
+            controller.SwitchState(PlayerState.Attack);
+            return;
+        }
+
+
+        #endregion
+
+
 
         #region ¶¯»­²¥·Å½áÊøÇÐ»»×´Ì¬
         if (isAnimationEnd())

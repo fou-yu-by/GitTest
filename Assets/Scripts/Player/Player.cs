@@ -26,30 +26,46 @@ public class Player : SingleMonoBase<Player>
 
     [Header("冲刺")]
     public bool isInputDash;
-    public float dashDuration;
-    public float dashTimer;
-    public float dashForce;
-    public float dashColdTime;
-    public bool canDash = true;
+
+
+    //滑墙
+    public WallCheck wallCheck;
+
+    [Header("攻击")]
+    public float attackDamage;
+    public bool isInputAttack;
+    public bool canCombo;
+    public int attackComboNum;
+    public float maxComboTime;
+
 
     protected override void Awake()
     {
         base.Awake();
         foot = GetComponentInChildren<Foot>();
+        wallCheck = GetComponentInChildren<WallCheck>();
+
         inputSystem = new InputActions();
         inputSystem.Enable();
+
         //--------------------------------------------------------------------------------------------
         animator = GetComponentInChildren<Animator>();
         rb = GetComponent<Rigidbody2D>();
         capsuleCollider = GetComponent<CapsuleCollider2D>();
     }
 
+    private void Start()
+    {
+        attackComboNum = 1;
+    }
 
     private void Update()
     {
         GetPlayerInput();
 
-        CheckPlayerDash();
+        //CheckPlayerDash();
+
+        CheckAttackCombo();
     }
 
 
@@ -66,6 +82,9 @@ public class Player : SingleMonoBase<Player>
 
         //冲刺输入
         isInputDash = inputSystem.PlayerController.Dash.triggered;
+
+        //攻击输入
+        isInputAttack = inputSystem.PlayerController.Attack.triggered;
     }
 
     /// <summary>
@@ -87,25 +106,60 @@ public class Player : SingleMonoBase<Player>
         }
     }
 
+
+    #region 冷却协程
+
+    //当前正在运行的冷却协程
+    private Coroutine coldTimeCoroutine;
+
     /// <summary>
-    /// 处理冲刺冷却
+    /// 处理攻击连段次数相关
     /// </summary>
-    
-    private bool islocked = false;
-    private void CheckPlayerDash()
+
+    private void CheckAttackCombo()
     {
-        if(islocked) { return; }
-        if (!canDash && !islocked)
+        if (!canCombo) return;
+        IEnumerator myCoroutine = ColdTimeCoroutine(
+                maxComboTime, null, null,
+                () =>
+                {
+                    canCombo = false;
+                    attackComboNum = 1;
+                });
+        if (coldTimeCoroutine != null)
         {
-            islocked = true;
-            StartCoroutine(ColdTimeCoroutine(
-                dashColdTime,
-                (isReady) => { canDash = isReady; islocked = !isReady; },
-                (coldTimer) => { dashTimer = coldTimer; }
-                ));
+            StopCoroutine(myCoroutine);
         }
-        
+        coldTimeCoroutine = StartCoroutine(myCoroutine);
+
+
     }
+
+
+
+
+
+
+    ///// <summary>
+    ///// 处理冲刺冷却
+    ///// </summary>
+    
+    //private bool islocked = false;
+    //private void CheckPlayerDash()
+    //{
+    //    if(islocked) { return; }
+    //    if (!canDash && !islocked)
+    //    {
+    //        islocked = true;
+    //        StartCoroutine(ColdTimeCoroutine(
+    //            dashColdTime,
+    //            (isReady) => { canDash = isReady; islocked = !isReady; },
+    //            (coldTimer) => { dashTimer = coldTimer; },
+    //            null
+    //            ));
+    //    }
+        
+    //}
 
     /// <summary>
     /// 冷却协程
@@ -113,27 +167,31 @@ public class Player : SingleMonoBase<Player>
     /// <param name="coldTime">冷却时间</param>
     /// <param name="OnUpdateBool">传递是否可用</param>
     /// <param name="OnUpdateTimer">需要帧更新的事件</param>
+    /// <param name="OnComplete">协程结束时候触发的事件</param>
     /// <returns></returns>
-    public IEnumerator ColdTimeCoroutine(float coldTime, Action<bool> OnUpdateBool = null, Action<float> OnUpdateTimer = null)
+    public IEnumerator ColdTimeCoroutine(float coldTime, Action<bool> OnUpdateBool = null, Action<float> OnUpdateTimer = null, Action OnComplete = null)
     {
         float timer = 0;
         OnUpdateBool?.Invoke(false);
-        while(timer < coldTime)
+        while (timer < coldTime)
         {
             timer += Time.deltaTime;
-            if(OnUpdateTimer != null)
+            if (OnUpdateTimer != null)
             {
                 OnUpdateTimer(timer);
             }
-            
+
             yield return null;
 
         }
         OnUpdateBool?.Invoke(true);
         OnUpdateTimer?.Invoke(0);
+        OnComplete?.Invoke();
+
+
     }
 
-
+    #endregion
 
 
 

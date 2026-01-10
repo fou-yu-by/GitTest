@@ -8,14 +8,13 @@ public class PlayerDashState : PlayerStateBase
     {
         base.OnEnter();
         PlayAnimation("Dash", 0);
-        player.canDash = false;
-        player.rb.AddForce(new Vector2(player.faceDir * player.dashForce, player.rb.velocity.y), ForceMode2D.Impulse);
+        player.rb.AddForce(new Vector2(player.faceDir * SkillManager.Instance.dash.dashForce, player.rb.velocity.y), ForceMode2D.Impulse);
     }
 
     public override void Update()
     {
         base.Update();
-        if(stateStayTime >= player.dashDuration)
+        if(stateStayTime >= SkillManager.Instance.dash.dashDuration)
         {
             if(player.foot.CheckOnGround() && player.inputMovement.x == 0)
             {
@@ -28,6 +27,11 @@ public class PlayerDashState : PlayerStateBase
                 return;
             }
 
+        }
+        else
+        {
+            //dashÆÚ¼ä
+            ObjectPool.Instance.GetGameObjectFromPool();
         }
 
 
