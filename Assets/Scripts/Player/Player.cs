@@ -15,7 +15,7 @@ public class Player : SingleMonoBase<Player>
     [HideInInspector] public Vector2 inputMovement;
     [HideInInspector] public Foot foot;
     public float moveSpeed;
-    [HideInInspector] public float faceDir;
+    [HideInInspector] public float faceDir = 1;
     public bool isFlipX = false;
 
 
@@ -38,6 +38,10 @@ public class Player : SingleMonoBase<Player>
     public int attackComboNum;
     public float maxComboTime;
 
+    [Header("Sword")]
+    public GameObject sword;
+    public float swordReturnImpact;
+    public float swordReturnSpeedMult;
 
     protected override void Awake()
     {
@@ -67,6 +71,20 @@ public class Player : SingleMonoBase<Player>
 
         CheckAttackCombo();
     }
+
+    public void AssignNewSword(GameObject _newSword)
+    {
+        sword = _newSword;
+    }
+
+    public void CatchTheSword()
+    {
+        StateController.Instance.SwitchState(PlayerState.CatchSword);
+
+        Destroy(sword);
+    }
+
+
 
 
     /// <summary>

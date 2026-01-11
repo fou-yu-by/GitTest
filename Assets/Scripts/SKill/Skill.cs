@@ -7,6 +7,10 @@ public class Skill : MonoBehaviour
     [SerializeField] protected float coolDown;
     protected float coolDownTimer;
 
+    protected virtual void Start()
+    {
+    }
+
     protected virtual void Update()
     {
         coolDownTimer -= Time.deltaTime;

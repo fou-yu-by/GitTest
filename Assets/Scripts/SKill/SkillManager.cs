@@ -6,6 +6,7 @@ public class SkillManager : SingleMonoBase<SkillManager>
 {
     public Dash_Skill dash;
 
+    public Sword_Skill sword_Skill;
 
 
     protected override void Awake()
@@ -17,6 +18,7 @@ public class SkillManager : SingleMonoBase<SkillManager>
     private void Start()
     {
         dash = GetComponent<Dash_Skill>(); 
+        sword_Skill = GetComponent<Sword_Skill>();
     }
 
 }

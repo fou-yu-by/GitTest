@@ -60,6 +60,16 @@ public class PlayerIdleState : PlayerStateBase
 
         #endregion
 
+        #region Ãé×¼
+        if (Input.GetKey(KeyCode.Mouse1) && HashNoSword())
+        {
+            controller.SwitchState(PlayerState.AimSword);
+            return;
+        }
+
+        #endregion
+
+
 
 
         #region ¶¯»­²¥·Å½áÊøÇÐ»»×´Ì¬
@@ -71,6 +81,17 @@ public class PlayerIdleState : PlayerStateBase
 
         #endregion
 
+    }
+
+
+    private bool HashNoSword()
+    {
+        if (!player.sword)
+        {
+            return true;
+        }
+        player.sword.GetComponent<Sword_SkillController>().ReturnSword();
+        return false;
     }
 
 

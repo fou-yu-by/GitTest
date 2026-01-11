@@ -12,7 +12,7 @@ public class PlayerStateBase : StateBase
 
     protected Player player;
 
-    private AnimatorStateInfo stateInfo;
+    protected AnimatorStateInfo stateInfo;
 
     public override void Init(IStateMachineOwner owner)
     {

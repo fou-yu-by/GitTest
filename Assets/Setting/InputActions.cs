@@ -127,6 +127,15 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Aim"",
+                    ""type"": ""Button"",
+                    ""id"": ""ce1bc7e7-5f37-4c1c-acde-5adefbd7a6cb"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -217,6 +226,17 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                     ""action"": ""Dash"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ebb1054d-c700-4dee-9671-5916fa163a7f"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Aim"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -229,6 +249,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         m_PlayerController_Jump = m_PlayerController.FindAction("Jump", throwIfNotFound: true);
         m_PlayerController_Attack = m_PlayerController.FindAction("Attack", throwIfNotFound: true);
         m_PlayerController_Dash = m_PlayerController.FindAction("Dash", throwIfNotFound: true);
+        m_PlayerController_Aim = m_PlayerController.FindAction("Aim", throwIfNotFound: true);
     }
 
     ~@InputActions()
@@ -313,6 +334,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_PlayerController_Jump;
     private readonly InputAction m_PlayerController_Attack;
     private readonly InputAction m_PlayerController_Dash;
+    private readonly InputAction m_PlayerController_Aim;
     /// <summary>
     /// Provides access to input actions defined in input action map "PlayerController".
     /// </summary>
@@ -340,6 +362,10 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "PlayerController/Dash".
         /// </summary>
         public InputAction @Dash => m_Wrapper.m_PlayerController_Dash;
+        /// <summary>
+        /// Provides access to the underlying input action "PlayerController/Aim".
+        /// </summary>
+        public InputAction @Aim => m_Wrapper.m_PlayerController_Aim;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -378,6 +404,9 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
             @Dash.started += instance.OnDash;
             @Dash.performed += instance.OnDash;
             @Dash.canceled += instance.OnDash;
+            @Aim.started += instance.OnAim;
+            @Aim.performed += instance.OnAim;
+            @Aim.canceled += instance.OnAim;
         }
 
         /// <summary>
@@ -401,6 +430,9 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
             @Dash.started -= instance.OnDash;
             @Dash.performed -= instance.OnDash;
             @Dash.canceled -= instance.OnDash;
+            @Aim.started -= instance.OnAim;
+            @Aim.performed -= instance.OnAim;
+            @Aim.canceled -= instance.OnAim;
         }
 
         /// <summary>
@@ -469,5 +501,12 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnDash(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Aim" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnAim(InputAction.CallbackContext context);
     }
 }
