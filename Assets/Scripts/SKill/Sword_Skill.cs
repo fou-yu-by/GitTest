@@ -1,14 +1,26 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Sword_Skill : Skill
 {
+    public SwordType swordType = SwordType.Regular;
+
+    [Header("Bounce info")]
+    [SerializeField] private int amountOfBounce;
+    [SerializeField] private float bounceGravity;
+
+    [Header("Peirce info")]
+    [SerializeField] private int pierceAmount;
+    [SerializeField] private float pierceGravity;
+
+
 
     [Header("Skill info")]
     [SerializeField] private GameObject swordPrefab;
     [SerializeField] private Vector2 launchForce;
-    [SerializeField] private float swordGravity;
+    private float swordGravity;
 
 
 
@@ -30,8 +42,24 @@ public class Sword_Skill : Skill
         
     }
 
+
+    private void SetupGravity()
+    {
+        switch (swordType)
+        {
+            case SwordType.Bounce:
+                swordGravity = bounceGravity;
+                break;
+            case SwordType.Pierce:
+                swordGravity = pierceGravity;
+                break;
+        }
+    }
+
     protected override void Update()
     {
+        SetupGravity();
+
         if (Input.GetKeyUp(KeyCode.Mouse1))
         {
             finalDir = new Vector2(AimDirection().normalized.x * launchForce.x, AimDirection().normalized.y * launchForce.y);
@@ -52,12 +80,22 @@ public class Sword_Skill : Skill
         GameObject newSword = Instantiate(swordPrefab, Player.Instance.transform.position, transform.rotation);
         Sword_SkillController newSwordScript = newSword.GetComponent<Sword_SkillController>();
 
-        newSwordScript.SetupSword(finalDir,swordGravity);
+        if(swordType == SwordType.Bounce)
+        {
+            newSwordScript.SetupBounce(true, amountOfBounce);
+        }
+        else if(swordType == SwordType.Pierce)
+        {
+            newSwordScript.SetupPierce(pierceAmount);
+        }
+
+            newSwordScript.SetupSword(finalDir, swordGravity);
         Player.Instance.AssignNewSword(newSword);
 
         DotsActive(false);
     }
 
+    #region Ãé×¼
     public Vector2 AimDirection()
     {
         Vector2 playerPosition = Player.Instance.transform.position;
@@ -93,5 +131,7 @@ public class Sword_Skill : Skill
 
         return position;
     }
+    #endregion
+
 
 }

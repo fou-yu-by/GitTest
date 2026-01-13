@@ -23,7 +23,6 @@ public class PlayerAimSwordState : PlayerStateBase
             PlayAnimation("ThrowSword", 0);
             player.StartCoroutine(WaitforAnimation("ThrowSword"));
         }
-        Debug.Log(player.faceDir);
         Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         if(player.transform.position.x >  mousePosition.x && player.faceDir == 1)
         {

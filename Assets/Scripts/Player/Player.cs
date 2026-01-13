@@ -70,6 +70,12 @@ public class Player : SingleMonoBase<Player>
         //CheckPlayerDash();
 
         CheckAttackCombo();
+
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            SkillManager.Instance.crystal.CanUseSkill();
+        }
+
     }
 
     public void AssignNewSword(GameObject _newSword)

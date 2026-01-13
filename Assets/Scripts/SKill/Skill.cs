@@ -6,7 +6,7 @@ public class Skill : MonoBehaviour
 {
     [SerializeField] protected float coolDown;
     protected float coolDownTimer;
-
+    protected Player player = Player.Instance;
     protected virtual void Start()
     {
     }
@@ -30,6 +30,27 @@ public class Skill : MonoBehaviour
     public virtual void UseSkill()
     {
 
+    }
+
+    protected virtual Transform FindClosetEnemy(Transform _checkTransform)
+    {
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(_checkTransform.position, 25);
+        float closestDistance = Mathf.Infinity;
+        Transform closestEnemy = null;
+
+        foreach(var hit in colliders)
+        {
+            if (hit.CompareTag("Enemy")){
+                float distanceToEnemy = Vector2.Distance(_checkTransform.position, hit.transform.position);
+
+                if(distanceToEnemy < closestDistance)
+                {
+                    closestDistance = distanceToEnemy;
+                    closestEnemy = hit.transform;
+                }
+            }
+        }
+        return closestEnemy;
     }
 
 }
