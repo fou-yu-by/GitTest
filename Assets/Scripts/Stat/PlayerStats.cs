@@ -16,9 +16,5 @@ public class PlayerStats : CharacterStats
         base.Start();
     }
 
-    public override void TakeDamage()
-    {
-        base.TakeDamage();
 
-    }
 }

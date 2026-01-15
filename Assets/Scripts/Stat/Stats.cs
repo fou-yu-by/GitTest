@@ -19,6 +19,13 @@ public class Stats
         return finalValue;
     }
 
+    public void SetDefaultValue(int _value)
+    {
+        baseValue = _value;
+    }
+
+
+
     public void AddModifier(int _modifier)
     {
         modifiers.Add(_modifier);
@@ -26,7 +33,7 @@ public class Stats
 
     public void RemoveModifier(int _modifier)
     {
-        modifiers.RemoveAt(_modifier);
+        modifiers.Remove(_modifier);
     }
 
 }
